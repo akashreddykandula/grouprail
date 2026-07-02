@@ -32,20 +32,36 @@ const Navbar = () => {
   ];
 
   const handleSectionClick = (section) => {
-  setMobileOpen(false);
+    setMobileOpen(false);
 
-  // If already on home page
-  if (location.pathname === "/") {
-    document.querySelector(section)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-    return;
-  }
+    // If not on home page, navigate there first
+    if (location.pathname !== '/') {
+      navigate(`/${section}`);
 
-  // Navigate to home page with hash
-  navigate(`/${section}`);
-};
+      // Wait for Home page to render before scrolling
+      setTimeout(() => {
+        const element = document.querySelector(section);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 300);
+
+      return;
+    }
+
+    // Already on home page
+    const element = document.querySelector(section);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
 
   return (
     <header
